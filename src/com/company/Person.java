@@ -17,13 +17,11 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "surname='" + surname + '\'' +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", gender='" + gender + '\'' +
-                ", id=" + id +
-                '}';
+        return "ID: " + id +
+                "\nLast name: '" + surname +
+                "\nFirst name: '" + name + '\'' +
+                "\nAge: " + age +
+                "\nGender: '" + gender + '\'' + "\n";
     }
 
     public String getSurname() {
