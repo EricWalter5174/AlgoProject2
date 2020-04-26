@@ -321,18 +321,6 @@ public class PersonalData {
         }
     }
 
-    public void delete(int key) {
-        if (key < 0 && key > size) throw new IllegalArgumentException("Element does not exist in tree");
-        if (!contains(key)) return;
-
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = red;
-
-        root = delete(root, key);
-        if (!isEmpty()) root.color = black;
-        numberOfElements--;
-    }
-
     public boolean isEmpty() {
         return root == null;
     }
