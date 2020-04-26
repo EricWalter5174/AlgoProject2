@@ -325,13 +325,11 @@ public class PersonalData {
         if (key < 0 && key > size) throw new IllegalArgumentException("Element does not exist in tree");
         if (!contains(key)) return;
 
-        // if both children of root are black, set root to red
         if (!isRed(root.left) && !isRed(root.right))
             root.color = red;
 
         root = delete(root, key);
         if (!isEmpty()) root.color = black;
-        // assert check();
         numberOfElements--;
     }
 
@@ -368,19 +366,14 @@ public class PersonalData {
         if (key == null) throw new IllegalArgumentException("argument to delete() is null");
         if (!contains(key)) return;
 
-        // if both children of root are black, set root to red
         if (!isRed(root.left) && !isRed(root.right))
             root.color = red;
 
         root = delete(root, key);
         if (!isEmpty()) root.color = black;
-        // assert check();
     }
 
-    // delete the key-value pair with the given key rooted at node
     private RBTNode delete(RBTNode node, Integer key) {
-        // assert get(node, key) != null;
-
         if (key.compareTo(node.key) < 0)  {
             if (!isRed(node.left) && !isRed(node.left.left))
                 node = moveRedLeft(node);
@@ -397,8 +390,6 @@ public class PersonalData {
                 RBTNode x = min(node.right);
                 node.key = x.key;
                 node.person = x.person;
-                // node.val = get(node.right, min(node.right).key);
-                // node.key = min(node.right).key;
                 node.right = deleteMin(node.right);
             }
             else node.right = delete(node.right, key);
@@ -407,9 +398,6 @@ public class PersonalData {
     }
 
     private RBTNode moveRedLeft(RBTNode node) {
-        // assert (node != null);
-        // assert isRed(node) && !isRed(node.left) && !isRed(node.left.left);
-
         flipColors(node);
         if (isRed(node.right.left)) {
             rightRotate(node.right);
@@ -420,8 +408,6 @@ public class PersonalData {
     }
 
     private void moveRedRight(RBTNode node) {
-        // assert (node != null);
-        // assert isRed(node) && !isRed(node.right) && !isRed(node.right.left);
         flipColors(node);
         if (isRed(node.left.left)) {
             rightRotate(node);
@@ -430,10 +416,6 @@ public class PersonalData {
     }
 
     private void flipColors(RBTNode node) {
-        // node must have opposite color of its two children
-        // assert (node != null) && (node.left != null) && (node.right != null);
-        // assert (!isRed(node) &&  isRed(node.left) &&  isRed(node.right))
-        //    || (isRed(node)  && !isRed(node.left) && !isRed(node.right));
         node.color = !node.color;
         node.left.color = !node.left.color;
         node.right.color = !node.right.color;
@@ -444,7 +426,6 @@ public class PersonalData {
         return min(root).key;
     }
 
-    // the smallest key in subtree rooted at x; null if no such key
     private RBTNode min(RBTNode x) {
         if (x.left == null) return x;
         else                return min(x.left);
@@ -453,13 +434,11 @@ public class PersonalData {
     public void deleteMin() {
         if (isEmpty()) throw new NoSuchElementException("BST underflow");
 
-        // if both children of root are black, set root to red
         if (!isRed(root.left) && !isRed(root.right))
             root.color = red;
 
         root = deleteMin(root);
         if (!isEmpty()) root.color = black;
-        // assert check();
     }
 
     private RBTNode deleteMin(RBTNode h) {
@@ -474,8 +453,6 @@ public class PersonalData {
     }
 
     private RBTNode balance(RBTNode h) {
-        // assert (h != null);
-
         if (isRed(h.right))                      leftRotate(h);
         if (isRed(h.left) && isRed(h.left.left)) rightRotate(h);
         if (isRed(h.left) && isRed(h.right))     flipColors(h);
