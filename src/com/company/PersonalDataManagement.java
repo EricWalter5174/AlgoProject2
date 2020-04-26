@@ -36,7 +36,7 @@ public class PersonalDataManagement {
             age = reader.nextInt();
             reader.skip(", ");
             gender = reader.nextLine();
-            rbt.insert(counter, new Person(surname, name, age, gender));
+            rbt.insert(counter, new Person(surname, name, age, gender, counter));
             counter++;
         }
         reader.close();
@@ -58,7 +58,8 @@ public class PersonalDataManagement {
                     age = input.nextInt();
                     System.out.println("Enter gender:");
                     gender = input.next();
-                    rbt.insert(counter, new Person(surname, name, age, gender));
+                    rbt.insert(counter, new Person(surname, name, age, gender, counter));
+                    counter++;
                     break;
                 case "s":
                     System.out.println("Enter key (int) of node to search: ");

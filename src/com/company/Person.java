@@ -5,21 +5,24 @@ public class Person {
     private String name;
     private int age;
     private String gender;
+    private Integer id;
 
-    public Person(String surname, String name, int age, String gender) {
+    public Person(String surname, String name, int age, String gender, Integer id) {
         this.surname = surname;
         this.name = name;
         this.age = age;
         this.gender = gender;
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "Person{" +
-                "Surname='" + surname + '\'' +
-                ", Name='" + name + '\'' +
-                ", Age=" + age +
-                ", Gender='" + gender + '\'' +
+                "surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", id=" + id +
                 '}';
     }
 

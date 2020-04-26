@@ -364,28 +364,44 @@ public class PersonalData {
         return node.color == red;
     }
 
-    private RBTNode delete(RBTNode node, int key) {
-        assert get(node, key) != null;
+    public void delete(Integer key) {
+        if (key == null) throw new IllegalArgumentException("argument to delete() is null");
+        if (!contains(key)) return;
 
-        if (node.key < 0) {
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = red;
+
+        root = delete(root, key);
+        if (!isEmpty()) root.color = black;
+        // assert check();
+    }
+
+    // delete the key-value pair with the given key rooted at node
+    private RBTNode delete(RBTNode node, Integer key) {
+        // assert get(node, key) != null;
+
+        if (key.compareTo(node.key) < 0)  {
             if (!isRed(node.left) && !isRed(node.left.left))
                 node = moveRedLeft(node);
             node.left = delete(node.left, key);
-        } else {
+        }
+        else {
             if (isRed(node.left))
                 rightRotate(node);
-            if (node.key == 0 && (node.right == null))
+            if (key.compareTo(node.key) == 0 && (node.right == null))
                 return null;
             if (!isRed(node.right) && !isRed(node.right.left))
                 moveRedRight(node);
-            if (node.key == 0) {
+            if (key.compareTo(node.key) == 0) {
                 RBTNode x = min(node.right);
                 node.key = x.key;
                 node.person = x.person;
-                node.person = get(node.right, min(node.right).key);
-                node.key = min(node.right).key;
+                // node.val = get(node.right, min(node.right).key);
+                // node.key = min(node.right).key;
                 node.right = deleteMin(node.right);
-            } else node.right = delete(node.right, key);
+            }
+            else node.right = delete(node.right, key);
         }
         return balance(node);
     }
@@ -423,15 +439,15 @@ public class PersonalData {
         node.right.color = !node.right.color;
     }
 
-    public int min() {
+    public Integer min() {
         if (isEmpty()) throw new NoSuchElementException("calls min() with empty symbol table");
         return min(root).key;
     }
 
-    private RBTNode min(RBTNode node) {
-        // assert node != null;
-        if (node.left == null) return node;
-        else return min(node.left);
+    // the smallest key in subtree rooted at x; null if no such key
+    private RBTNode min(RBTNode x) {
+        if (x.left == null) return x;
+        else                return min(x.left);
     }
 
     public void deleteMin() {
