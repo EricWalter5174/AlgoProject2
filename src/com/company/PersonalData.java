@@ -343,17 +343,18 @@ public class PersonalData {
         return get(key) != null;
     }
 
-    public Person get(int key) {
-        if (key < 0 && key > size) throw new IllegalArgumentException("Element does not exist in tree");
+    public Person get(Integer key) {
+        if (key == null) throw new IllegalArgumentException("argument to get() is null");
         return get(root, key);
     }
 
-    private Person get(RBTNode node, int key) {
-        while (node != null) {
-            int cmp = node.key;
-            if (cmp < 0) node = node.left;
-            else if (cmp > 0) node = node.right;
-            else return node.person;
+    // value associated with the given key in subtree rooted at x; null if no such key
+    private Person get(RBTNode x, Integer key) {
+        while (x != null) {
+            int cmp = key.compareTo(x.key);
+            if      (cmp < 0) x = x.left;
+            else if (cmp > 0) x = x.right;
+            else              return x.person;
         }
         return null;
     }
@@ -364,7 +365,7 @@ public class PersonalData {
     }
 
     private RBTNode delete(RBTNode node, int key) {
-        // assert get(node, key) != null;
+        assert get(node, key) != null;
 
         if (node.key < 0) {
             if (!isRed(node.left) && !isRed(node.left.left))
@@ -475,5 +476,6 @@ public class PersonalData {
     public int getNumberOfElements() {
         return numberOfElements;
     }
+
 
 }

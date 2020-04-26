@@ -70,9 +70,15 @@ public class PersonalDataManagement {
                 case "v":
                     int average = 0;
                     for(int i = 0; i <= rbt.getNumberOfElements(); i++){
+                        System.out.println(rbt.get(i).getAge());
                         average += rbt.get(i).getAge();
                     }
                     System.out.println("Average age of people: " + average/rbt.getNumberOfElements());
+                    break;
+                case "l":
+                    for(int i = 0; i <= rbt.getNumberOfElements(); i++){
+                        System.out.println(rbt.get(i).toString());
+                    }
             }
         }
 
