@@ -1,12 +1,13 @@
 package com.company;
 
 public class RBTNode {
-    public static final boolean black=false;
-    public static final boolean red=true;
+    public static final boolean black = false;
+    public static final boolean red = true;
     public int key;
     public Boolean color;
     public RBTNode left, right, parent;
     public Person person;
+    public int size;
 
     public RBTNode(int k, Person person) {
         setKey(k);
@@ -17,6 +18,14 @@ public class RBTNode {
         setParent(null);
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
     public void setPerson(Person person) {
         this.person = person;
     }
@@ -25,22 +34,56 @@ public class RBTNode {
         return person;
     }
 
-    public int getKey() {return key;}
-    public void setKey(int key) {this.key = key;}
+    public String getName() {
+        return person.getName();
+    }
 
-    public Boolean getColor() {return color;}
-    public void setColor(Boolean color) {this.color = color;}
+    public int getKey() {
+        return key;
+    }
 
-    public RBTNode getLeft() {return left;}
-    public void setLeft(RBTNode left) {this.left = left;}
+    public void setKey(int key) {
+        this.key = key;
+    }
 
-    public RBTNode getRight() {return right;}
-    public void setRight(RBTNode right) {this.right = right;}
+    public Boolean getColor() {
+        return color;
+    }
 
-    public RBTNode getParent() {return parent;}
-    public void setParent(RBTNode parent) {this.parent = parent;}
+    public void setColor(Boolean color) {
+        this.color = color;
+    }
 
-    public static boolean isBlack() {return black;}
-    public static boolean isRed() {return red;}
+    public RBTNode getLeft() {
+        return left;
+    }
+
+    public void setLeft(RBTNode left) {
+        this.left = left;
+    }
+
+    public RBTNode getRight() {
+        return right;
+    }
+
+    public void setRight(RBTNode right) {
+        this.right = right;
+    }
+
+    public RBTNode getParent() {
+        return parent;
+    }
+
+    public void setParent(RBTNode parent) {
+        this.parent = parent;
+    }
+
+    public static boolean isBlack() {
+        return black;
+    }
+
+    public static boolean isRed() {
+        return red;
+    }
 }
 

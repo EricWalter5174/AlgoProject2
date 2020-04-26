@@ -1,10 +1,15 @@
 package com.company;
 
+import java.util.NoSuchElementException;
+
 public class PersonalData {
-    public static final boolean black=false;
-    public static final boolean red=true;
+    public static final boolean black = false;
+    public static final boolean red = true;
     private RBTNode nil = new RBTNode(-1, null);
     private RBTNode root;
+    private int size = 0;
+    private int numberOfElements = 0;
+
     public PersonalData() {
         nil.parent = nil;
         nil.left = nil;
@@ -12,24 +17,26 @@ public class PersonalData {
         nil.setColor(black);
         root = nil;
     } // Constructor
-    public void insert(int k, Person person){
-        insert(new RBTNode( k, person));
+
+    public void insert(int k, Person person) {
+        insert(new RBTNode(k, person));
     }
+
     private void insert(RBTNode z) {
         RBTNode y = nil;
         RBTNode x = root;
-        while(x!= nil) {
+        while (x != nil) {
             y = x;
-            if(z.key < x.key) {
+            if (z.key < x.key) {
                 x = x.left;
-            }else {
+            } else {
                 x = x.right;
             }
         }
         z.parent = y;
-        if(y == nil) {
+        if (y == nil) {
             root = z;
-        }else if(z.key < y.key) {
+        } else if (z.key < y.key) {
             y.left = z;
         } else {
             y.right = z;
@@ -38,8 +45,10 @@ public class PersonalData {
         z.right = nil;
         z.color = red;
         insertFixup(z);
+        numberOfElements++;
 
     }
+
     private void insertFixup(RBTNode node) {
         while (node.parent.color == red) {
             RBTNode uncle = nil;
@@ -87,19 +96,20 @@ public class PersonalData {
         root.color = black;
         // Line 44-87: http://www.codebytes.in/2014/10/red-black-tree-java-implementation.html 14.04.2020 - 10:21
     }
-    private void  leftRotate(RBTNode x) {
-        if(x.right == nil) {
+
+    private void leftRotate(RBTNode x) {
+        if (x.right == nil) {
             return;
         }
         RBTNode y = x.right;
         x.right = y.left;
-        if(y.left != nil) {
+        if (y.left != nil) {
             y.left.parent = x;
         }
         y.parent = x.parent;
-        if(x.parent == nil) {
+        if (x.parent == nil) {
             root = y;
-        } else if(x == x.parent.left) {
+        } else if (x == x.parent.left) {
             x.parent.left = y;
         } else {
             x.parent.right = y;
@@ -107,19 +117,20 @@ public class PersonalData {
         y.left = x;
         x.parent = y;
     }
-    private void  rightRotate(RBTNode x) {
-        if(x.left == nil) {
+
+    private void rightRotate(RBTNode x) {
+        if (x.left == nil) {
             return;
         }
         RBTNode y = x.left;
         x.left = y.right;
-        if(y.right != nil) {
+        if (y.right != nil) {
             y.right.parent = x;
         }
         y.parent = x.parent;
-        if(x.parent == nil) {
+        if (x.parent == nil) {
             root = y;
-        } else if(x == x.parent.right) {
+        } else if (x == x.parent.right) {
             x.parent.right = y;
         } else {
             x.parent.left = y;
@@ -131,12 +142,12 @@ public class PersonalData {
     public int height() {
         return height(root);
     }
+
     private int height(RBTNode node) {
         if (node == nil)
             return 0;
-        else
-        {
-            int lHeight= height(node.left);
+        else {
+            int lHeight = height(node.left);
             int rHeight = height(node.right);
 
             if (lHeight > rHeight) {
@@ -148,23 +159,14 @@ public class PersonalData {
             }
         }
     }
-    public Person search(int k) {
+
+
+    public RBTNode search(int k) {
         RBTNode v = root;
         while (v != nil && k != v.getKey()) {
-            if(k < v.getKey()) {
+            if (k < v.getKey()) {
                 v = v.getLeft();
-            }else {
-                v = v.getRight();
-            }
-        }
-        return v.getPerson();
-    }
-    private RBTNode search_E(int k) {
-        RBTNode v = root;
-        while (v != nil && k != v.getKey()) {
-            if(k < v.getKey()) {
-                v = v.getLeft();
-            }else {
+            } else {
                 v = v.getRight();
             }
         }
@@ -173,10 +175,10 @@ public class PersonalData {
 
     private boolean rule1(RBTNode node) {
 
-        if(node.color ==null) {
+        if (node.color == null) {
             return false;
         }
-        if(node == nil ) {
+        if (node == nil) {
             return true;
         }
 
@@ -185,31 +187,32 @@ public class PersonalData {
 
     //No red node, has red child
     private boolean rule3(RBTNode node) {
-        if(node == nil) {
+        if (node == nil) {
             return true;
         }
 
-        if(node.getColor()) {
-            if(node.getLeft().getColor() || node.getRight().getColor()) {
+        if (node.getColor()) {
+            if (node.getLeft().getColor() || node.getRight().getColor()) {
                 return false;
             }
         }
 
         return rule3(node.left) && rule3(node.right);
     }
+
     //If black node has leaf, leaf has to be red
     private boolean rule4(RBTNode node) {
-        if(node == nil) {
+        if (node == nil) {
             return true;
         }
-        if(!node.getColor()) {
-            if(node.getLeft() == nil && node.getRight() != nil) {
-                if(!node.getRight().getColor()) {
+        if (!node.getColor()) {
+            if (node.getLeft() == nil && node.getRight() != nil) {
+                if (!node.getRight().getColor()) {
                     return false;
                 }
             }
-            if(node.left != nil && node.right == nil) {
-                if(!node.getLeft().getColor()){
+            if (node.left != nil && node.right == nil) {
+                if (!node.getLeft().getColor()) {
                     return false;
                 }
             }
@@ -222,14 +225,14 @@ public class PersonalData {
         RBTNode nodeR = nodeL;
         int blackCounterL = 0;
         int blackCounterR = 0;
-        while(nodeL != nil) {
-            if(nodeL.color == RBTNode.black) {
+        while (nodeL != nil) {
+            if (nodeL.color == RBTNode.black) {
                 blackCounterL++;
             }
             nodeL = nodeL.left;
         }
-        while(nodeR != nil) {
-            if(nodeR.color == RBTNode.black) {
+        while (nodeR != nil) {
+            if (nodeR.color == RBTNode.black) {
                 blackCounterR++;
             }
             nodeR = nodeR.right;
@@ -238,7 +241,7 @@ public class PersonalData {
     }
 
     private boolean rule5(RBTNode node) {
-        if(node != nil) {
+        if (node != nil) {
             return true;
         }
         int check = checkFive(node);
@@ -249,68 +252,228 @@ public class PersonalData {
 
     public boolean CheckRB() {
 
-        if(!rule1(root)) {
+        if (!rule1(root)) {
             System.out.println("Violation of rule 1");
             return false;
         }
-        if(root.getColor()) {
+        if (root.getColor()) {
             System.out.println("Violation of rule 2");
             return false;
         }
-        if(!rule3(root)){
+        if (!rule3(root)) {
             System.out.println("Violation of rule 3");
             return false;
         }
-        if(!rule4(root)){
+        if (!rule4(root)) {
             System.out.println("Violation of rule 4");
             return false;
         }
-        if(!rule5(root)){
+        if (!rule5(root)) {
             System.out.println("Violation of rule 5");
             return false;
         }
         return true;
     }
+
     public void manipulation1() {
         root.color = null;
     }
+
     public void manipulation2() {
         root.color = red;
     }
+
     public void manipulation3() {
         int i = 0;
         RBTNode temp = nil;
-        while(!(temp.color)) {
-            temp = search_E(i);
+        while (!(temp.color)) {
+            temp = search(i);
             i++;
         }
-        if(temp.left != nil || temp.right != nil) {
-            if(temp.left != nil) {
+        if (temp.left != nil || temp.right != nil) {
+            if (temp.left != nil) {
                 temp.left.color = red;
             } else {
                 temp.right.color = red;
             }
         }
-        if(temp.parent != nil) {
+        if (temp.parent != nil) {
             temp.parent.color = red;
         }
     }
+
     public void manipulation4() {
         int i = 0;
         RBTNode temp = nil;
-        while(true) {
-            temp = search_E(i);
+        while (true) {
+            temp = search(i);
             i++;
-            if(!(temp.color)) {
-                if(temp.getLeft() == nil && temp.getRight() != nil && temp.right.color) {
+            if (!(temp.color)) {
+                if (temp.getLeft() == nil && temp.getRight() != nil && temp.right.color) {
                     temp.right.color = black;
                     break;
                 }
-                if(temp.getLeft() != nil && temp.getRight() == nil && temp.left.color) {
+                if (temp.getLeft() != nil && temp.getRight() == nil && temp.left.color) {
                     temp.left.color = black;
                     break;
                 }
             }
         }
     }
+
+    public void delete(int key) {
+        if (key < 0 && key > size) throw new IllegalArgumentException("Element does not exist in tree");
+        if (!contains(key)) return;
+
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = red;
+
+        root = delete(root, key);
+        if (!isEmpty()) root.color = black;
+        // assert check();
+        numberOfElements--;
+    }
+
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    public boolean contains(int key) {
+        return get(key) != null;
+    }
+
+    public Person get(int key) {
+        if (key < 0 && key > size) throw new IllegalArgumentException("Element does not exist in tree");
+        return get(root, key);
+    }
+
+    private Person get(RBTNode node, int key) {
+        while (node != null) {
+            int cmp = node.key;
+            if (cmp < 0) node = node.left;
+            else if (cmp > 0) node = node.right;
+            else return node.person;
+        }
+        return null;
+    }
+
+    private boolean isRed(RBTNode node) {
+        if (node == null) return false;
+        return node.color == red;
+    }
+
+    private RBTNode delete(RBTNode node, int key) {
+        // assert get(node, key) != null;
+
+        if (node.key < 0) {
+            if (!isRed(node.left) && !isRed(node.left.left))
+                node = moveRedLeft(node);
+            node.left = delete(node.left, key);
+        } else {
+            if (isRed(node.left))
+                rightRotate(node);
+            if (node.key == 0 && (node.right == null))
+                return null;
+            if (!isRed(node.right) && !isRed(node.right.left))
+                moveRedRight(node);
+            if (node.key == 0) {
+                RBTNode x = min(node.right);
+                node.key = x.key;
+                node.person = x.person;
+                node.person = get(node.right, min(node.right).key);
+                node.key = min(node.right).key;
+                node.right = deleteMin(node.right);
+            } else node.right = delete(node.right, key);
+        }
+        return balance(node);
+    }
+
+    private RBTNode moveRedLeft(RBTNode node) {
+        // assert (node != null);
+        // assert isRed(node) && !isRed(node.left) && !isRed(node.left.left);
+
+        flipColors(node);
+        if (isRed(node.right.left)) {
+            rightRotate(node.right);
+            leftRotate(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
+    private void moveRedRight(RBTNode node) {
+        // assert (node != null);
+        // assert isRed(node) && !isRed(node.right) && !isRed(node.right.left);
+        flipColors(node);
+        if (isRed(node.left.left)) {
+            rightRotate(node);
+            flipColors(node);
+        }
+    }
+
+    private void flipColors(RBTNode node) {
+        // node must have opposite color of its two children
+        // assert (node != null) && (node.left != null) && (node.right != null);
+        // assert (!isRed(node) &&  isRed(node.left) &&  isRed(node.right))
+        //    || (isRed(node)  && !isRed(node.left) && !isRed(node.right));
+        node.color = !node.color;
+        node.left.color = !node.left.color;
+        node.right.color = !node.right.color;
+    }
+
+    public int min() {
+        if (isEmpty()) throw new NoSuchElementException("calls min() with empty symbol table");
+        return min(root).key;
+    }
+
+    private RBTNode min(RBTNode node) {
+        // assert node != null;
+        if (node.left == null) return node;
+        else return min(node.left);
+    }
+
+    public void deleteMin() {
+        if (isEmpty()) throw new NoSuchElementException("BST underflow");
+
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = red;
+
+        root = deleteMin(root);
+        if (!isEmpty()) root.color = black;
+        // assert check();
+    }
+
+    private RBTNode deleteMin(RBTNode h) {
+        if (h.left == null)
+            return null;
+
+        if (!isRed(h.left) && !isRed(h.left.left))
+            h = moveRedLeft(h);
+
+        h.left = deleteMin(h.left);
+        return balance(h);
+    }
+
+    private RBTNode balance(RBTNode h) {
+        // assert (h != null);
+
+        if (isRed(h.right))                      leftRotate(h);
+        if (isRed(h.left) && isRed(h.left.left)) rightRotate(h);
+        if (isRed(h.left) && isRed(h.right))     flipColors(h);
+
+        h.size = size(h.left) + size(h.right) + 1;
+        return h;
+    }
+
+    private int size(RBTNode x) {
+        if (x == null) return 0;
+        return x.size;
+    }
+
+    public int getNumberOfElements() {
+        return numberOfElements;
+    }
+
 }
