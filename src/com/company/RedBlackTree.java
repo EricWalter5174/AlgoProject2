@@ -49,11 +49,11 @@ public class RedBlackTree {
 
     private void insertFixup(RBTNode node) {
         while (node.parent.color == red) {
-            RBTNode uncle = nil;
+            RBTNode uncle = null;
             if (node.parent == node.parent.parent.left) {
                 uncle = node.parent.parent.right;
 
-                if (uncle != nil && uncle.color == red) {
+                if (uncle != null && uncle.color == red) {
                     node.parent.color = black;
                     uncle.color = black;
                     node.parent.parent.color = red;
@@ -293,7 +293,7 @@ public class RedBlackTree {
             return;
         }
         listing(node.left);
-        System.out.print(((node.color==red)?"Color: Red ":"Color: Black ")+"Key: "+node.key+" Parent: "+node.parent.key+"\n");
+        System.out.print(node.person.toString()+"\n");
         listing(node.right);
     }
 

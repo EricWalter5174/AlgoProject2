@@ -63,6 +63,9 @@ public class PersonalDataManagement {
 
                     }else
                         key++;
+                    if(rbt.search(key) != null){
+                        key = rbt.getNumberOfElements();
+                    }
                     System.out.println("Person inserted");
                     break;
                 case "s":
