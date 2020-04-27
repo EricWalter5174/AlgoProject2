@@ -1,22 +1,20 @@
 package com.company;
 
-import java.util.NoSuchElementException;
-
-public class PersonalData {
+public class RedBlackTree {
     public static final boolean black = false;
     public static final boolean red = true;
     private RBTNode nil = new RBTNode(-1, null);
     private RBTNode root;
-    private int size = 0;
     private int numberOfElements = 0;
+    int ageAverage= 0;
 
-    public PersonalData() {
+    public RedBlackTree() {
         nil.parent = nil;
         nil.left = nil;
         nil.right = nil;
         nil.setColor(black);
         root = nil;
-    } // Constructor
+    }
 
     public void insert(int k, Person person) {
         insert(new RBTNode(k, person));
@@ -94,7 +92,6 @@ public class PersonalData {
             }
         }
         root.color = black;
-        // Line 44-87: http://www.codebytes.in/2014/10/red-black-tree-java-implementation.html 14.04.2020 - 10:21
     }
 
     private void leftRotate(RBTNode x) {
@@ -275,60 +272,6 @@ public class PersonalData {
         return true;
     }
 
-    public void manipulation1() {
-        root.color = null;
-    }
-
-    public void manipulation2() {
-        root.color = red;
-    }
-
-    public void manipulation3() {
-        int i = 0;
-        RBTNode temp = nil;
-        while (!(temp.color)) {
-            temp = search(i);
-            i++;
-        }
-        if (temp.left != nil || temp.right != nil) {
-            if (temp.left != nil) {
-                temp.left.color = red;
-            } else {
-                temp.right.color = red;
-            }
-        }
-        if (temp.parent != nil) {
-            temp.parent.color = red;
-        }
-    }
-
-    public void manipulation4() {
-        int i = 0;
-        RBTNode temp = nil;
-        while (true) {
-            temp = search(i);
-            i++;
-            if (!(temp.color)) {
-                if (temp.getLeft() == nil && temp.getRight() != nil && temp.right.color) {
-                    temp.right.color = black;
-                    break;
-                }
-                if (temp.getLeft() != nil && temp.getRight() == nil && temp.left.color) {
-                    temp.left.color = black;
-                    break;
-                }
-            }
-        }
-    }
-
-    public boolean isEmpty() {
-        return root == null;
-    }
-
-    public boolean contains(int key) {
-        return get(key) != null;
-    }
-
     public Person get(Integer key) {
         if (key == null) throw new IllegalArgumentException("argument to get() is null");
         return get(root, key);
@@ -338,124 +281,220 @@ public class PersonalData {
     private Person get(RBTNode x, Integer key) {
         while (x != null) {
             int cmp = key.compareTo(x.key);
-            if      (cmp < 0) x = x.left;
+            if (cmp < 0) x = x.left;
             else if (cmp > 0) x = x.right;
-            else              return x.person;
+            else return x.person;
         }
         return null;
     }
 
-    private boolean isRed(RBTNode node) {
-        if (node == null) return false;
-        return node.color == red;
-    }
-
-    public void delete(Integer key) {
-        if (key == null) throw new IllegalArgumentException("argument to delete() is null");
-        if (!contains(key)) return;
-
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = red;
-
-        root = delete(root, key);
-        if (!isEmpty()) root.color = black;
-    }
-
-    private RBTNode delete(RBTNode node, Integer key) {
-        if (key.compareTo(node.key) < 0)  {
-            if (!isRed(node.left) && !isRed(node.left.left))
-                node = moveRedLeft(node);
-            node.left = delete(node.left, key);
+    public void listing(RBTNode node) {
+        if (node == nil) {
+            return;
         }
-        else {
-            if (isRed(node.left))
-                rightRotate(node);
-            if (key.compareTo(node.key) == 0 && (node.right == null))
-                return null;
-            if (!isRed(node.right) && !isRed(node.right.left))
-                moveRedRight(node);
-            if (key.compareTo(node.key) == 0) {
-                RBTNode x = min(node.right);
-                node.key = x.key;
-                node.person = x.person;
-                node.right = deleteMin(node.right);
-            }
-            else node.right = delete(node.right, key);
+        listing(node.left);
+        System.out.print(((node.color==red)?"Color: Red ":"Color: Black ")+"Key: "+node.key+" Parent: "+node.parent.key+"\n");
+        listing(node.right);
+    }
+
+    public int getAverageAge(RBTNode node) {
+        if (node == nil) {
+            return -1;
         }
-        return balance(node);
+        getAverageAge(node.left);
+        ageAverage += node.person.getAge();
+        getAverageAge(node.right);
+        return ageAverage;
     }
 
-    private RBTNode moveRedLeft(RBTNode node) {
-        flipColors(node);
-        if (isRed(node.right.left)) {
-            rightRotate(node.right);
-            leftRotate(node);
-            flipColors(node);
-        }
-        return node;
-    }
-
-    private void moveRedRight(RBTNode node) {
-        flipColors(node);
-        if (isRed(node.left.left)) {
-            rightRotate(node);
-            flipColors(node);
-        }
-    }
-
-    private void flipColors(RBTNode node) {
-        node.color = !node.color;
-        node.left.color = !node.left.color;
-        node.right.color = !node.right.color;
-    }
-
-    public Integer min() {
-        if (isEmpty()) throw new NoSuchElementException("calls min() with empty symbol table");
-        return min(root).key;
-    }
-
-    private RBTNode min(RBTNode x) {
-        if (x.left == null) return x;
-        else                return min(x.left);
-    }
-
-    public void deleteMin() {
-        if (isEmpty()) throw new NoSuchElementException("BST underflow");
-
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = red;
-
-        root = deleteMin(root);
-        if (!isEmpty()) root.color = black;
-    }
-
-    private RBTNode deleteMin(RBTNode h) {
-        if (h.left == null)
+    private RBTNode findNode(RBTNode nodeToFind, RBTNode node) {
+        if (root == nil) {
             return null;
+        }
 
-        if (!isRed(h.left) && !isRed(h.left.left))
-            h = moveRedLeft(h);
-
-        h.left = deleteMin(h.left);
-        return balance(h);
+        if (nodeToFind.key < node.key) {
+            if (node.left != nil) {
+                return findNode(nodeToFind, node.left);
+            }
+        } else if (nodeToFind.key > node.key) {
+            if (node.right != nil) {
+                return findNode(nodeToFind, node.right);
+            }
+        } else if (nodeToFind.key == node.key) {
+            return node;
+        }
+        return null;
     }
 
-    private RBTNode balance(RBTNode h) {
-        if (isRed(h.right))                      leftRotate(h);
-        if (isRed(h.left) && isRed(h.left.left)) rightRotate(h);
-        if (isRed(h.left) && isRed(h.right))     flipColors(h);
-
-        h.size = size(h.left) + size(h.right) + 1;
-        return h;
+    private void transplant(RBTNode target, RBTNode with){
+        if(target.parent == nil){
+            root = with;
+        }else if(target == target.parent.left){
+            target.parent.left = with;
+        }else
+            target.parent.right = with;
+        with.parent = target.parent;
     }
 
-    private int size(RBTNode x) {
-        if (x == null) return 0;
-        return x.size;
+    RBTNode treeMinimum(RBTNode subTreeRoot){
+        while(subTreeRoot.left!=nil){
+            subTreeRoot = subTreeRoot.left;
+        }
+        return subTreeRoot;
     }
+
+    void rotateLeft(RBTNode node) {
+        if (node.parent != nil) {
+            if (node == node.parent.left) {
+                node.parent.left = node.right;
+            } else {
+                node.parent.right = node.right;
+            }
+            node.right.parent = node.parent;
+            node.parent = node.right;
+            if (node.right.left != nil) {
+                node.right.left.parent = node;
+            }
+            node.right = node.right.left;
+            node.parent.left = node;
+        } else {//Need to rotate root
+            RBTNode right = root.right;
+            root.right = right.left;
+            right.left.parent = root;
+            root.parent = right;
+            right.left = root;
+            right.parent = nil;
+            root = right;
+        }
+    }
+
+    void rotateRight(RBTNode node) {
+        if (node.parent != nil) {
+            if (node == node.parent.left) {
+                node.parent.left = node.left;
+            } else {
+                node.parent.right = node.left;
+            }
+
+            node.left.parent = node.parent;
+            node.parent = node.left;
+            if (node.left.right != nil) {
+                node.left.right.parent = node;
+            }
+            node.left = node.left.right;
+            node.parent.right = node;
+        } else {//Need to rotate root
+            RBTNode left = root.left;
+            root.left = root.left.right;
+            left.right.parent = root;
+            root.parent = left;
+            left.right = root;
+            left.parent = nil;
+            root = left;
+        }
+    }
+
+    boolean delete(RBTNode z){
+        if((z = findNode(z, root))==null)
+            return false;
+        RBTNode x;
+        RBTNode y = z; // temporary reference y
+        boolean y_original_color = y.color;
+
+        if(z.left == nil){
+            x = z.right;
+            transplant(z, z.right);
+        }else if(z.right == nil){
+            x = z.left;
+            transplant(z, z.left);
+        }else{
+            y = treeMinimum(z.right);
+            y_original_color = y.color;
+            x = y.right;
+            if(y.parent == z)
+                x.parent = y;
+            else{
+                transplant(y, y.right);
+                y.right = z.right;
+                y.right.parent = y;
+            }
+            transplant(z, y);
+            y.left = z.left;
+            y.left.parent = y;
+            y.color = z.color;
+        }
+        numberOfElements--;
+        if(y_original_color==black)
+            deleteFixup(x);
+        return true;
+    }
+
+    void deleteFixup(RBTNode x){
+        while(x!=root && x.color == black){
+            if(x == x.parent.left){
+                RBTNode w = x.parent.right;
+                if(w.color == red){
+                    w.color = black;
+                    x.parent.color = red;
+                    rotateLeft(x.parent);
+                    w = x.parent.right;
+                }
+                if(w.left.color == black && w.right.color == black){
+                    w.color = red;
+                    x = x.parent;
+                    continue;
+                }
+                else if(w.right.color == black){
+                    w.left.color = black;
+                    w.color = red;
+                    rotateRight(w);
+                    w = x.parent.right;
+                }
+                if(w.right.color == red){
+                    w.color = x.parent.color;
+                    x.parent.color = black;
+                    w.right.color = black;
+                    rotateLeft(x.parent);
+                    x = root;
+                }
+            }else{
+                RBTNode w = x.parent.left;
+                if(w.color == red){
+                    w.color = black;
+                    x.parent.color = red;
+                    rotateRight(x.parent);
+                    w = x.parent.left;
+                }
+                if(w.right.color == black && w.left.color == black){
+                    w.color = red;
+                    x = x.parent;
+                    continue;
+                }
+                else if(w.left.color == black){
+                    w.right.color = black;
+                    w.color = red;
+                    rotateLeft(w);
+                    w = x.parent.left;
+                }
+                if(w.left.color == red){
+                    w.color = x.parent.color;
+                    x.parent.color = black;
+                    w.left.color = black;
+                    rotateRight(x.parent);
+                    x = root;
+                }
+            }
+        }
+        x.color = black;
+    }
+
 
     public int getNumberOfElements() {
         return numberOfElements;
+    }
+
+    public RBTNode getRoot(){
+        return root;
     }
 
 

@@ -24,19 +24,8 @@ public class Person {
                 "\nGender: '" + gender + '\'' + "\n";
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public int getAge() {
         return age;
     }
 
-    public String getGender() {
-        return gender;
-    }
 }

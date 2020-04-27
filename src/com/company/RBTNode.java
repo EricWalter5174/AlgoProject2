@@ -7,7 +7,6 @@ public class RBTNode {
     public Boolean color;
     public RBTNode left, right, parent;
     public Person person;
-    public int size;
 
     public RBTNode(int k, Person person) {
         setKey(k);
@@ -18,24 +17,12 @@ public class RBTNode {
         setParent(null);
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
     public void setPerson(Person person) {
         this.person = person;
     }
 
     public Person getPerson() {
         return person;
-    }
-
-    public String getName() {
-        return person.getName();
     }
 
     public int getKey() {
@@ -70,20 +57,9 @@ public class RBTNode {
         this.right = right;
     }
 
-    public RBTNode getParent() {
-        return parent;
-    }
-
     public void setParent(RBTNode parent) {
         this.parent = parent;
     }
 
-    public static boolean isBlack() {
-        return black;
-    }
-
-    public static boolean isRed() {
-        return red;
-    }
 }
 
