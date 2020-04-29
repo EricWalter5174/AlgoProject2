@@ -68,14 +68,11 @@ public class RedBlackTree {
                     continue;
                 }
                 if (node == node.parent.right) {
-                    //Double rotation needed
                     node = node.parent;
                     rotateLeft(node);
                 }
                 node.parent.color = black;
                 node.parent.parent.color = red;
-                //if the "else if" code hasn't executed, this
-                //is a case where we only need a single rotation
                 rotateRight(node.parent.parent);
             } else {
                 uncle = node.parent.parent.left;
@@ -87,14 +84,11 @@ public class RedBlackTree {
                     continue;
                 }
                 if (node == node.parent.left) {
-                    //Double rotation needed
                     node = node.parent;
                     rotateRight(node);
                 }
                 node.parent.color = black;
                 node.parent.parent.color = red;
-                //if the "else if" code hasn't executed, this
-                //is a case where we only need a single rotation
                 rotateLeft(node.parent.parent);
             }
         }
@@ -243,12 +237,12 @@ public class RedBlackTree {
             root = left;
         }
     }
-
+    // http://www.codebytes.in/2014/10/red-black-tree-java-implementation.html 26.04.20 - 17:00
     boolean delete(RBTNode z) {
         if ((z = findNode(z, root)) == null)
             return false;
         RBTNode x;
-        RBTNode y = z; // temporary reference y
+        RBTNode y = z;
         boolean y_original_color = y.color;
 
         if (z.left == nil) {
