@@ -1,3 +1,10 @@
+/*
+ * Authors: Eric Walter, Giuseppe Buccellato
+ * Algorithms and Datastructures
+ * University of Applied Sciences Osnabrueck
+ * Computer Science and Media Applications (B.Sc.)
+ * Summer Semester 2020
+ * */
 package com.company;
 
 public class RBTNode {

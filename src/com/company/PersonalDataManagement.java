@@ -1,3 +1,10 @@
+/*
+* Authors: Eric Walter, Giuseppe Buccellato
+* Algorithms and Datastructures
+* University of Applied Sciences Osnabrueck
+* Computer Science and Media Applications (B.Sc.)
+* Summer Semester 2020
+* */
 package com.company;
 
 import java.io.File;
@@ -18,6 +25,7 @@ public class PersonalDataManagement {
         String caseInput = "whatever";
 
         System.out.println("Personal Data Management System 1.0\nSpecify absolute path to the data file:");
+
         String path = input.nextLine();
 
         try {
@@ -27,9 +35,9 @@ public class PersonalDataManagement {
             e.printStackTrace();
         }
         assert reader != null;
-        while(reader.hasNext()){
+        while (reader.hasNext()) {
             surname = reader.next();
-            name= reader.next();
+            name = reader.next();
             age = reader.nextInt();
             reader.skip(", ");
             gender = reader.nextLine();
@@ -38,14 +46,14 @@ public class PersonalDataManagement {
         }
         reader.close();
 
-        while(!caseInput.equals("e")){
+        while (!caseInput.equals("e")) {
             System.out.println("Select operation: \n (d)elete, (i)nsert, (s)earch, (n)umber, (v)average, (l)isting, (e)nd");
             caseInput = input.next();
-            switch (caseInput){
+            switch (caseInput) {
                 case "d":
                     System.out.println("Enter key (int) of node to delete:");
                     int tmp = input.nextInt();
-                    if(tmp < 0 || tmp > rbt.getNumberOfElements()){
+                    if (tmp < 0 || tmp > rbt.getNumberOfElements()) {
                         System.out.println("Person with ID " + tmp + " does not exist");
                         break;
                     }
@@ -62,10 +70,10 @@ public class PersonalDataManagement {
                     System.out.println("Enter gender:");
                     gender = input.next();
                     rbt.insert(key, new Person(surname, name, age, gender, key));
-                    if(!(key < rbt.getNumberOfElements())){
+                    if (!(key < rbt.getNumberOfElements())) {
                         key++;
                     }
-                    if(rbt.search(key) != null){
+                    if (rbt.search(key) != null) {
                         key = rbt.getNumberOfElements();
                     }
                     System.out.println("Person inserted");
@@ -79,6 +87,7 @@ public class PersonalDataManagement {
                     break;
                 case "v":
                     System.out.println("Average age of people: " + rbt.getAverageAge(rbt.getRoot()) / rbt.getNumberOfElements());
+                    rbt.resetAgeAverage();
                     break;
                 case "l":
                     rbt.listing(rbt.getRoot());
