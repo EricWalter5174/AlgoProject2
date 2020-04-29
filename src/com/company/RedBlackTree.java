@@ -157,7 +157,6 @@ public class RedBlackTree {
         }
     }
 
-
     public RBTNode search(int k) {
         RBTNode v = root;
         while (v != nil && k != v.getKey()) {
@@ -170,130 +169,24 @@ public class RedBlackTree {
         return v;
     }
 
-    private boolean rule1(RBTNode node) {
-
-        if (node.color == null) {
-            return false;
-        }
-        if (node == nil) {
-            return true;
-        }
-
-        return rule1(node.getLeft()) && rule1(node.getRight());
-    }
-
-    //No red node, has red child
-    private boolean rule3(RBTNode node) {
-        if (node == nil) {
-            return true;
-        }
-
-        if (node.getColor()) {
-            if (node.getLeft().getColor() || node.getRight().getColor()) {
-                return false;
-            }
-        }
-
-        return rule3(node.left) && rule3(node.right);
-    }
-
-    //If black node has leaf, leaf has to be red
-    private boolean rule4(RBTNode node) {
-        if (node == nil) {
-            return true;
-        }
-        if (!node.getColor()) {
-            if (node.getLeft() == nil && node.getRight() != nil) {
-                if (!node.getRight().getColor()) {
-                    return false;
-                }
-            }
-            if (node.left != nil && node.right == nil) {
-                if (!node.getLeft().getColor()) {
-                    return false;
-                }
-            }
-        }
-        return rule4(node.left) && rule4(node.right);
-    }
-
-    //Every path has same amount of black nodes
-    private int checkFive(RBTNode nodeL) {
-        RBTNode nodeR = nodeL;
-        int blackCounterL = 0;
-        int blackCounterR = 0;
-        while (nodeL != nil) {
-            if (nodeL.color == RBTNode.black) {
-                blackCounterL++;
-            }
-            nodeL = nodeL.left;
-        }
-        while (nodeR != nil) {
-            if (nodeR.color == RBTNode.black) {
-                blackCounterR++;
-            }
-            nodeR = nodeR.right;
-        }
-        return blackCounterR - blackCounterL;
-    }
-
-    private boolean rule5(RBTNode node) {
-        if (node != nil) {
-            return true;
-        }
-        int check = checkFive(node);
-
-        return check == 0 && rule5(node.left) && rule5(node.right);
-    }
-
-
-    public boolean CheckRB() {
-
-        if (!rule1(root)) {
-            System.out.println("Violation of rule 1");
-            return false;
-        }
-        if (root.getColor()) {
-            System.out.println("Violation of rule 2");
-            return false;
-        }
-        if (!rule3(root)) {
-            System.out.println("Violation of rule 3");
-            return false;
-        }
-        if (!rule4(root)) {
-            System.out.println("Violation of rule 4");
-            return false;
-        }
-        if (!rule5(root)) {
-            System.out.println("Violation of rule 5");
-            return false;
-        }
-        return true;
-    }
-
-    public Person get(Integer key) {
-        if (key == null) throw new IllegalArgumentException("argument to get() is null");
-        return get(root, key);
-    }
-
-    // value associated with the given key in subtree rooted at x; null if no such key
-    private Person get(RBTNode x, Integer key) {
-        while (x != null) {
-            int cmp = key.compareTo(x.key);
-            if (cmp < 0) x = x.left;
-            else if (cmp > 0) x = x.right;
-            else return x.person;
-        }
-        return null;
-    }
-
     public void listing(RBTNode node) {
         if (node == nil) {
             return;
         }
         listing(node.left);
         System.out.print(node.person.toString()+"\n");
+        listing(node.right);
+    }
+
+    public Person findName(RBTNode node, String name) {
+        if (node == nil) {
+            System.out.println(name + " was not found and could not be deleted");
+            return null;
+        }
+        listing(node.left);
+        if(node.getPerson().getName().equals(name)){
+            return node.person;
+        }
         listing(node.right);
     }
 
@@ -487,7 +380,6 @@ public class RedBlackTree {
         }
         x.color = black;
     }
-
 
     public int getNumberOfElements() {
         return numberOfElements;

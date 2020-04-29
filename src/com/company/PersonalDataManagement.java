@@ -8,17 +8,16 @@ public class PersonalDataManagement {
 
     public static void main(String[] args) {
         var rbt = new RedBlackTree();
-        int key = 0;
-        String surname;
-        String name;
-        int age;
-        String gender;
         var input = new Scanner(System.in);
         Scanner reader = null;
+        int key = 0;
+        int age;
+        String surname;
+        String name;
+        String gender;
         String caseInput = "whatever";
 
-        System.out.println("Personal Data Management System 1.0 \n Specify absolute path to the data file:");
-
+        System.out.println("Personal Data Management System 1.0\nSpecify absolute path to the data file:");
         String path = input.nextLine();
 
         try {
@@ -40,12 +39,16 @@ public class PersonalDataManagement {
         reader.close();
 
         while(!caseInput.equals("e")){
-            System.out.println("Select operation: \n (d)elete, (i)nsert, (s)earch, (n)umber, (v)average, (l)isting, (c)heck tree, (e)nd");
+            System.out.println("Select operation: \n (d)elete, (i)nsert, (s)earch, (n)umber, (v)average, (l)isting, (e)nd");
             caseInput = input.next();
             switch (caseInput){
                 case "d":
                     System.out.println("Enter key (int) of node to delete:");
                     int tmp = input.nextInt();
+                    if(tmp < 0 || tmp > rbt.getNumberOfElements()){
+                        System.out.println("Person with ID " + tmp + " does not exist");
+                        break;
+                    }
                     rbt.delete(rbt.search(tmp));
                     key = tmp;
                     break;
@@ -59,10 +62,9 @@ public class PersonalDataManagement {
                     System.out.println("Enter gender:");
                     gender = input.next();
                     rbt.insert(key, new Person(surname, name, age, gender, key));
-                    if(key < rbt.getNumberOfElements()){
-
-                    }else
+                    if(!(key < rbt.getNumberOfElements())){
                         key++;
+                    }
                     if(rbt.search(key) != null){
                         key = rbt.getNumberOfElements();
                     }
@@ -80,9 +82,6 @@ public class PersonalDataManagement {
                     break;
                 case "l":
                     rbt.listing(rbt.getRoot());
-                    break;
-                case "c":
-                    System.out.println("Is valid Red-Black-Tree: " + rbt.CheckRB() + "\nHeight of tree: " + rbt.height());
             }
         }
 
